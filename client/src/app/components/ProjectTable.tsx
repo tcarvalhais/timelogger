@@ -1,14 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react"
 import { DataGrid } from '@mui/x-data-grid'
-import { getProjects, getTotalTimeRegistered } from "../api/projects";
+import { Project } from "../../utils"
 
-interface Project {
-    id: any,
-    name: String,
-    creationDateTimestamp: number,
-    deadlineDateTimestamp: number,
-    projectStatus: number,
-    timeSpent: number
+interface ProjectTableProps {
+    listProjects: Project[]
 }
 
 const columns = [
@@ -57,25 +52,7 @@ const columns = [
     }
 ]
 
-export default function ProjectTable() {
-    const [listProjects, setListProjects] = useState<Project[]>([])
-
-    useEffect(() => {
-        const getListProjects = async () => {
-            const projects = await getProjects()
-            const projectsWithTotalTime = await Promise.all(
-                projects.map(async (project: { id: any }) => {
-                    const timeSpent = await getTotalTimeRegistered(project.id)
-                    return { ...project, timeSpent: timeSpent }
-                })
-            )
-
-            setListProjects(projectsWithTotalTime)
-        }
-
-        getListProjects()
-    }, [])
-
+export default function ProjectTable({ listProjects }: ProjectTableProps) {
     return (
         <div style={{ height: 400, width: '100%' }}>
             <DataGrid
@@ -90,7 +67,7 @@ export default function ProjectTable() {
                     },
                 }}
                 pageSizeOptions={[5, 10, 15, 20]}
-                checkboxSelection
+            /*checkboxSelection*/
             />
         </div>
     );

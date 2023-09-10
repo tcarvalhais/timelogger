@@ -25,3 +25,21 @@ export const getTotalTimeRegistered = async (projectId: any) => {
         return 0
     }
 }
+
+export const addNewProject = async (projectName: string, deadlineDate: number) => {
+    try {
+        const creationDateTimestamp = Math.floor(new Date().getTime() / 1000)
+        const body = {
+            name: projectName,
+            creationDateTimestamp: creationDateTimestamp,
+            deadlineDateTimestamp: deadlineDate
+        }
+
+        const response = await api.post("/projects/createProject", body)
+        return response.data
+    }
+    catch (error) {
+        console.log(error)
+        throw error
+    }
+}
