@@ -43,3 +43,14 @@ export const addNewProject = async (projectName: string, deadlineDate: number) =
         throw error
     }
 }
+
+export const getAllTimesRegistered = async (projectId: any) => {
+    try {
+        const response = await api.get(`/projects/getAllTimesRegistered/${projectId}`)
+        return response.data
+    }
+    catch (error) {
+        console.log(error)
+        return []
+    }
+}

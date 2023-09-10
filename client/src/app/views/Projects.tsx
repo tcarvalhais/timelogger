@@ -18,7 +18,7 @@ export default function Projects() {
             const projectsWithTotalTime = await Promise.all(
                 projects.map(async (project: { id: any }) => {
                     const timeSpent = await getTotalTimeRegistered(project.id)
-                    return { ...project, timeSpent: timeSpent }
+                    return { ...project, timeSpent: timeSpent, key: project.id }
                 })
             )
 

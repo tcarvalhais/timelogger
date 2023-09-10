@@ -45,7 +45,7 @@ namespace Timelogger.Api.Controllers
 		}
 
 		// Delete project
-		[HttpDelete("createProject/{projectId}")]
+		[HttpDelete("deleteProject/{projectId}")]
 		public IActionResult DeleteProject(Guid projectId)
 		{
 			var project = _context.GetProjectDetails(projectId);
