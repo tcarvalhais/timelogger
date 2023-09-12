@@ -14,7 +14,12 @@ namespace Timelogger
 		Completed
 	}
 
-	public class ApiContext : DbContext
+	public class TotalTimeRegisteredObject
+	{
+		public int TotalTimeMinutes { get; set; }
+	}
+
+	public class ApiContext : DbContext, IApiContext
 	{
 		public DbSet<Project> Projects { get; set; }
 		public DbSet<TimeRegistration> TimeRegistered { get; set; }
@@ -24,9 +29,9 @@ namespace Timelogger
 			// Nothing to be done...
 		}
 
-		public DbSet<Project> GetProjects()
+		public IEnumerable<Project> GetProjects()
 		{
-			return Projects;
+			return Projects.ToList();
 		}
 
 		public Project GetProjectDetails(Guid projectId)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Timelogger.DTOS;
 
@@ -8,9 +9,9 @@ namespace Timelogger.Api.Controllers
 	[Route("projects")]
 	public class ProjectsController : ControllerBase
 	{
-		private readonly ApiContext _context;
+		private readonly IApiContext _context;
 
-		public ProjectsController(ApiContext context)
+		public ProjectsController(IApiContext context)
 		{
 			_context = context;
 		}
@@ -19,7 +20,7 @@ namespace Timelogger.Api.Controllers
 		[HttpGet("getProjects")]
 		public IActionResult GetProjects()
 		{
-			var projects = _context.GetProjects();
+			var projects = _context.GetProjects().Select((project) => project.AsDTO());
 			return Ok(projects);
 		}
 
@@ -33,7 +34,7 @@ namespace Timelogger.Api.Controllers
 				return NotFound("Project not found");
 			}
 
-			return Ok(project);
+			return Ok(project.AsDTO());
 		}
 
 		// Create project
@@ -41,7 +42,7 @@ namespace Timelogger.Api.Controllers
 		public IActionResult CreateProject(CreateProjectDTO createProjectDTO)
 		{
 			var createdProject = _context.CreateProject(createProjectDTO);
-			return Created("Project created", createdProject);
+			return Created("Project created", createdProject.AsDTO());
 		}
 
 		// Delete project
@@ -83,7 +84,7 @@ namespace Timelogger.Api.Controllers
 			}
 
 			int totalMinutes = _context.GetTotalTimeRegistered(projectId);
-			var response = new
+			var response = new TotalTimeRegisteredObject
 			{
 				TotalTimeMinutes = totalMinutes
 			};

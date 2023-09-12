@@ -6,7 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Hosting;
 using Timelogger.Entities;
-using System.Collections.Generic;
 using Microsoft.OpenApi.Models;
 using System;
 
@@ -38,6 +37,7 @@ namespace Timelogger.Api
 				builder.AddDebug();
 			});
 
+			services.AddScoped<IApiContext, ApiContext>();
 			services.AddMvc(options => options.EnableEndpointRouting = false);
 			services.AddSwaggerGen(c =>
 			{
@@ -94,7 +94,7 @@ namespace Timelogger.Api
 			var testProject1 = new Project
 			{
 				Id = new Guid("76e98817-9433-4c1d-a736-0eaaff32d70e"),
-				Name = "The Very First Project",
+				Name = "First Project",
 				CreationDateTimestamp = 1694120389,
 				DeadlineDateTimestamp = 1701986389,
 				ProjectStatus = Status.New
