@@ -12,6 +12,7 @@ interface ProjectTableProps {
 }
 
 export default function ProjectTable({ listProjects }: ProjectTableProps) {
+    
     const [selectedRowKeys, setSelectedRowKeys] = useState<any[]>([])
     const [openSnackbar, setOpenSnackbar] = useState(false)
     const [snackbarMessage, setSnackbarMessage] = useState("")
@@ -36,7 +37,7 @@ export default function ProjectTable({ listProjects }: ProjectTableProps) {
             selectedRowKeys.forEach(async (projectId) => {
                 await deleteProject(projectId)
             })
-
+            
             handleOpenSnackbar('Project(s) deleted successfully', 'success')
             setTimeout(() => {
                 window.location.reload()

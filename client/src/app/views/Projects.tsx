@@ -6,6 +6,7 @@ import { Alert, Snackbar } from "@mui/material"
 import { Project } from "../../utils"
 
 export default function Projects() {
+
     const [openSnackbar, setOpenSnackbar] = useState(false)
     const [snackbarMessage, setSnackbarMessage] = useState("")
     const [snackbarSeverity, setSnackbarSeverity] = useState<'error' | 'warning' | 'info' | 'success'>('success')
@@ -36,12 +37,10 @@ export default function Projects() {
 
     const handleAddProject = async (newProject: { name: string; deadlineDate: string }) => {
         try {
-            await addNewProject(newProject.name, parseInt(newProject.deadlineDate, 10))
-
+            const createdProject = await addNewProject(newProject.name, parseInt(newProject.deadlineDate, 10))
+            setListProjects([...listProjects, { ...createdProject, timeSpent: 0, key: createdProject.id }])
+            
             handleOpenSnackbar('Project added successfully', 'success')
-            setTimeout(() => {
-                window.location.reload()
-            }, 1000)
         }
         catch (error: any) {
             handleOpenSnackbar('Error adding project: One or more parameters are blank', 'error')
