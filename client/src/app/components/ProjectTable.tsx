@@ -74,19 +74,27 @@ export default function ProjectTable({ listProjects }: ProjectTableProps) {
         selectedRowKeys,
         onChange: onSelectChange,
     }
+    
+    const numberSort = (a: number, b: number) => {
+        if (a === b) return 0
+        else if (a > b) return 1
+        else return -1
+    }
 
     const columns = [
         {
             title: 'Project Name',
             dataIndex: 'name',
             key: 'name',
-            width: 300
+            width: 300,
+            sorter: (a: Project, b: Project) => a.name.localeCompare(b.name as string)
         },
         {
             title: 'Creation Date',
             dataIndex: 'creationDateTimestamp',
             key: 'creationDateTimestamp',
             width: 200,
+            sorter: (a: Project, b: Project) => numberSort(a.creationDateTimestamp, b.creationDateTimestamp),
             render: (value: number) => {
                 const date = new Date(value * 1000)
                 return date.toLocaleDateString()
@@ -97,6 +105,7 @@ export default function ProjectTable({ listProjects }: ProjectTableProps) {
             dataIndex: 'deadlineDateTimestamp',
             key: 'deadlineDateTimestamp',
             width: 200,
+            sorter: (a: Project, b: Project) => numberSort(a.deadlineDateTimestamp, b.deadlineDateTimestamp),
             render: (value: number) => {
                 const date = new Date(value * 1000)
                 return date.toLocaleDateString()
@@ -113,6 +122,7 @@ export default function ProjectTable({ listProjects }: ProjectTableProps) {
             dataIndex: 'projectStatus',
             key: 'projectStatus',
             width: 150,
+            sorter: (a: Project, b: Project) => numberSort(a.projectStatus, b.projectStatus),
             render: (value: number) => {
                 const statusMap = {
                     0: 'New',
