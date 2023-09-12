@@ -37,11 +37,14 @@ export default function Projects() {
     const handleAddProject = async (newProject: { name: string; deadlineDate: string }) => {
         try {
             await addNewProject(newProject.name, parseInt(newProject.deadlineDate, 10))
+
             handleOpenSnackbar('Project added successfully', 'success')
-            window.location.reload()
+            setTimeout(() => {
+                window.location.reload()
+            }, 1000)
         }
-        catch (error) {
-            handleOpenSnackbar('Error adding project', 'error')
+        catch (error: any) {
+            handleOpenSnackbar('Error adding project: One or more parameters are blank', 'error')
         }
 
         setIsDialogOpen(false)
@@ -87,8 +90,7 @@ export default function Projects() {
             <Snackbar
                 open={openSnackbar}
                 autoHideDuration={6000}
-                onClose={() => setOpenSnackbar(false)}
-            >
+                onClose={() => setOpenSnackbar(false)}>
                 <Alert
                     elevation={6}
                     variant="filled"
