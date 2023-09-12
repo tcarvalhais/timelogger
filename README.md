@@ -1,5 +1,3 @@
-# timelogger
-
 # Timelogger Application
 
 Welcome to the Timelogger application! This README will guide you through the installation process for both the server (backend) and the client (frontend) components.
