@@ -12,6 +12,8 @@ export default function Projects() {
     const [snackbarSeverity, setSnackbarSeverity] = useState<'error' | 'warning' | 'info' | 'success'>('success')
     const [isDialogOpen, setIsDialogOpen] = useState(false)
     const [listProjects, setListProjects] = useState<Project[]>([])
+    const [filteredProjects, setFilteredProjects] = useState<Project[]>([])
+    const [searchText, setSearchText] = useState("")
 
     useEffect(() => {
         const getListProjects = async () => {
@@ -24,10 +26,19 @@ export default function Projects() {
             )
 
             setListProjects(projectsWithTotalTime)
+            setFilteredProjects(projectsWithTotalTime)
         }
 
         getListProjects()
     }, [])
+
+    useEffect(() => {
+        const filteredProjects = listProjects.filter((project) =>
+            project.name.toLowerCase().includes(searchText.toLowerCase())
+        )
+
+        setFilteredProjects(filteredProjects)
+    }, [searchText])
 
     const handleOpenSnackbar = (message: string, severity: 'error' | 'warning' | 'info' | 'success') => {
         setSnackbarMessage(message)
@@ -39,7 +50,8 @@ export default function Projects() {
         try {
             const createdProject = await addNewProject(newProject.name, parseInt(newProject.deadlineDate, 10))
             setListProjects([...listProjects, { ...createdProject, timeSpent: 0, key: createdProject.id }])
-            
+            setFilteredProjects([...filteredProjects, { ...createdProject, timeSpent: 0, key: createdProject.id }])
+
             handleOpenSnackbar('Project added successfully', 'success')
         }
         catch (error: any) {
@@ -47,6 +59,10 @@ export default function Projects() {
         }
 
         setIsDialogOpen(false)
+    }
+
+    const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchText(event.target.value)
     }
 
     return (
@@ -67,18 +83,14 @@ export default function Projects() {
                             type="search"
                             placeholder="Search"
                             aria-label="Search"
+                            value={searchText}
+                            onChange={handleSearchInputChange}
                         />
-                        <button
-                            className="bg-blue-500 hover:bg-blue-700 text-white rounded-full py-2 px-4 ml-2"
-                            type="submit"
-                        >
-                            Search
-                        </button>
                     </form>
                 </div>
             </div>
 
-            <ProjectTable listProjects={listProjects} />
+            <ProjectTable listProjects={filteredProjects} />
 
             <AddProjectDialog
                 open={isDialogOpen}
